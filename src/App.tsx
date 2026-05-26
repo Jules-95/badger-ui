@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Login from './routes/login';
 import { NeedAuth } from './routes/NeedAuth';
 import Serveur from './routes/serveur';
@@ -9,15 +9,11 @@ import Vm from './routes/vm';
 
 export default function App() {
 
-const [token, setToken] = useState("");
-
-useEffect(() => {
-  const monToken = localStorage.getItem("token");
-  console.log("token :", monToken)
-  if (monToken) {
-    setToken(monToken);
-  }
-}, []);
+  // useState initialise le token avec la valeur dans localStorage 
+  // get Item va chercher le token sauvegarder dans le nav
+  // Pour || "" ca fix le problème de redirection vers login au refesh -> le token démarrait à "" et attendait le use effect (token vide donc /login) 
+  // Maintenant token dispo dès le premier affichage -> NeedAuth ne voit plus de token vide
+const [token, setToken] = useState(localStorage.getItem("token") || "");
 
   return (
     <BrowserRouter>
