@@ -1,17 +1,19 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom"
+import { setToken } from "../store/slices/authSlice";
 
-//Typage
-interface LoginType {
-    setToken: (token: string) => void;
-}
 
-export default function Login ({ setToken }: LoginType) {
+
+export default function Login () {
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/home";
+
+    // use Dispatch permet d'envoyer des action au store redux 
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,12 +24,12 @@ export default function Login ({ setToken }: LoginType) {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
-    console.log(data);
+    const data = await response.json(); 
 
     if (data.success) {
-      localStorage.setItem("token", data.jwt); 
-      setToken(data.jwt);                         
+      // dispatch envoie l'action setToken au store 
+      // authSlice stock le token dan redux et dans localstorage
+      dispatch(setToken(data.jwt));                         
       navigate(from, { replace: true });
     } else {
       alert("Identifiants incorrects");

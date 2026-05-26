@@ -1,12 +1,11 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-//Typage 
-interface NeedAuthType {
-  token: string;
-}
-
-export function NeedAuth({ token }: NeedAuthType) {
+export function NeedAuth() {
   const location = useLocation();
+
+  // useSelector lit le token directement depuis le store Redux
+  const token = useSelector((state: any) => state.auth.token);
 
   if (token) {
     return <Outlet />;
