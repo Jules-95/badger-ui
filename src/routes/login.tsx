@@ -11,7 +11,7 @@ export default function Login ({ setToken }: LoginType) {
     const[password, setPassword] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/user";
+    const from = location.state?.from?.pathname || "/home";
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

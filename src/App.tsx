@@ -1,10 +1,12 @@
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import Login from './routes/login';
 import { NeedAuth } from './routes/NeedAuth';
 import Serveur from './routes/serveur';
 import User from './routes/user';
 import Vm from './routes/vm';
+import Layout from './routes/Layout';
+import Home from './routes/Home';
 
 
 export default function App() {
@@ -17,23 +19,24 @@ const [token, setToken] = useState(localStorage.getItem("token") || "");
 
   return (
     <BrowserRouter>
-    <h1>Interface pour Badger</h1>
-    <ul>
-      <li><NavLink to='/login'>Login</NavLink></li>
-      <li><NavLink to='/serveur'>Serveurs</NavLink></li>
-      <li><NavLink to='/user'>Users</NavLink></li>
-      <li><NavLink to='/vm'>Vm</NavLink></li>
-    </ul>
-
       <Routes>
+        {/* Route publique */}
         <Route path="/login" element={<Login setToken={setToken} />} />
+
+        {/* Routes protégées */}
         <Route element={<NeedAuth token={token} />}>
-          <Route path="/serveur" element={<Serveur token={token} />} />
-          <Route path="/user" element={<User token={token} />} />
-          <Route path="/vm" element={<Vm token={token} />} />
+          <Route element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/serveur" element={<Serveur token={token} />} />
+            <Route path="/user" element={<User token={token} />} />
+            <Route path="/vm" element={<Vm token={token} />} />
+          </Route>
         </Route>
+
+        {/* Par défaut → login */}
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 
 }
