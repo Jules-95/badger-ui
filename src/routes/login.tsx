@@ -29,7 +29,11 @@ export default function Login () {
     if (data.success) {
       // dispatch envoie l'action setToken au store 
       // authSlice stock le token dan redux et dans localstorage
-      dispatch(setToken(data.jwt));                         
+      dispatch(setToken(data.jwt));
+
+      //Affichage du jwt décodé 
+      console.log("token décodé :", JSON.parse(atob(data.jwt.split('.')[1])));     
+
       navigate(from, { replace: true });
     } else {
       alert("Identifiants incorrects");
