@@ -27,9 +27,37 @@ export default function User() {
     return (
         <div>
             <h2>Utilisateurs</h2>
-            {users.map((user) => (
-                <p key={user.id}>{user.firstname} {user.name} — {user.email}</p>
-            ))}
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Actif</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {users.map((user)=> (
+                       <tr key={user.id}>
+                        <td>{user.firstname}</td>
+                        <td>{user.name}</td>
+                        <td>{user.email}</td>
+                        <td>{user.roles[0]}</td>
+                        <td>{user.active ? "OUI" : "NON"}</td>
+                        <td>
+                            <button>Détail</button>
+                            <button>Modifier</button>
+                            <button>Supprimer</button>
+                        </td>
+                       </tr> 
+                    ))}
+                </tbody>
+            </table>
+
+            <button> Ajouter User</button>
         </div>
     );
 }
