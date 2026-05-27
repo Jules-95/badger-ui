@@ -24,11 +24,29 @@ export default function User() {
         ssh_user: "",
         team: "",
         role: "",
-        ip_address: "127.0.0.1"
+        ip_address: "127.0.0.1" // ip obligatoire
     });
 
+
+    const fetchUsers = () => {
+        fetch("https://badger.arcplex.dev/api/v2/admin/user", {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then((res) => res.json())
+            .then((data) => setUsers(data));
+    }
+
+    // Rappel useEffect  : S'execute au chargement -> Appel l'api en passant le jwt dans le header -> res.json converti la reponse en json -> data c'est le tableau d'util -> setUsers(data) = Je stock le tableau dans le state pour l'afficher -> Enfin useEffect se relance si le token a changé
+
+
+    useEffect(() => {
+        fetchUsers();
+    }, [token]);
+
+    
+
     const handleChange = (e) => {
-        setNewUser({...newUser, [e.target.name]: e.target.value });
+    setNewUser({...newUser, [e.target.name]: e.target.value });
     }
 
     const handleCreate = (e) => {
@@ -45,21 +63,9 @@ export default function User() {
         .then((data)=> {
             console.log(data);
             setShowForm(false);
+            fetchUsers();
         });
     }
-
-    // Rappel useEffect  : S'execute au chargement -> Appel l'api en passant le jwt dans le header -> res.json converti la reponse en json -> data c'est le tableau d'util -> setUsers(data) = Je stock le tableau dans le state pour l'afficher -> Enfin useEffect se relance si le token a changé
-
-
-    useEffect(() => {
-        fetch("https://badger.arcplex.dev/api/v2/admin/user/me", {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            setUsers(data);
-         });
-    }, [token]);
 
 
 
