@@ -69,6 +69,24 @@ export default function User() {
 
 
 
+    const handleDelete = async (userId) => {
+        // Fenêtre de confirmation avant de supprimer
+        const confirmed = window.confirm("Voulez-vous vraiment supprimer cet utilisateur ? ");
+        if (!confirmed) return;
+
+        fetch(`https://badger.arcplex.dev/api/v2/admin/user/${userId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then(() => {
+            fetchUsers();
+        });
+    };
+
+
+
     return (
         <div>
             <h2>Utilisateurs</h2>
@@ -96,7 +114,7 @@ export default function User() {
                         <td>{user.active ? "OUI" : "NON"}</td>
                         <td>
                             <button>Modifier</button>
-                            <button>Supprimer</button>
+                            <button onClick={() => handleDelete(user.id)}>Supprimer</button>
                         </td>
                        </tr> 
                     ))}
