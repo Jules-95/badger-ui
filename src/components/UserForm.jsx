@@ -38,6 +38,7 @@ export default function UserForm({ user, onSubmit, onClose }) {
           ssh_user: "",
           team: "",
           role: "",
+          password: "",
           ip_address: "127.0.0.1",
         },
   );
@@ -111,6 +112,19 @@ export default function UserForm({ user, onSubmit, onClose }) {
               <option value="ROLE_SUPER_ADMIN">Super Admin</option>
             </select>
           </div>
+          {!user && (
+            <div>
+                <input
+                    name="password"
+                    type="password"
+                    placeholder="Mot de passe"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+          )}
+          
 
           <button type="submit">{user ? "Modifier" : "Ajouter"}</button>
           <button type="button" onClick={onClose}>

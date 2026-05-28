@@ -32,16 +32,29 @@ export default function User() {
   // Création d'un user : Reçoit les données du form UserForm
   // Ajout direct de l'user retourné par l'API au state sans fetchUsers
   const handleCreate = (formData) => {
+
+    const payload = {
+        name: formData.name,
+        firstname: formData.firstname,
+        email: formData.email,
+        ssh_user: formData.ssh_user,
+        role: formData.role,
+        team: formData.team,
+        ip_address: formData.ip_address,
+        plain_password: formData.password
+    };
+
     fetch("https://badger.arcplex.dev/api/v2/admin/user", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(payload),
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         // Ajout de l'user retourné par l'api au tableau existant
         setUsers([...users, data]);
         setShowForm(false);
