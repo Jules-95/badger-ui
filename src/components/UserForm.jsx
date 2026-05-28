@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import "../styles/Form.css";
 
 // Composant pour la création et l'édition d'un user
@@ -8,14 +9,27 @@ import "../styles/Form.css";
 // - onClose : Fonction pour fermer la modale
 
 export default function UserForm({ user, onSubmit, onClose }) {
-  // role et team demande une conveersion entre api et formualire (Solution temporaire -> IA)
-  // Pour team il faut utiliser /client et pas un number pour id
+
+    // Sert pour appeler /client/me depuis ici en appelant le store Redux
+    const token = useSelector((state) => state.auth.token);
+
+    const [teams, setTeams] = useState([]);
+    
+    useEffect(() => {
+        fetch("https://badger.arcplex.dev/api/v2/admin/client/me", {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => res.json())
+        .then((data) => setTeams(data));
+    }, []);
+
+
   const [formData, setFormData] = useState(
     user
       ? {
           ...user,
           role: user.roles[0],
-          team: user.team.id,
+          team: user.team.id, // Solution IA
         }
       : {
           name: "",
@@ -81,14 +95,12 @@ export default function UserForm({ user, onSubmit, onClose }) {
             />
           </div>
           <div>
-            <input
-              name="team"
-              type="number"
-              placeholder="Team Id"
-              value={formData.team}
-              onChange={handleChange}
-              required
-            />
+            <select name="team" value={formData.team} onChange={handleChange}>
+                <option value="">Choisir team</option>
+                {teams.map((team) => (
+                    <option key={team.id} value={team.id}>{team.name}</option>
+                ))}
+            </select>
           </div>
           <div>
             <select name="role" value={formData.role} onChange={handleChange}>
