@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import UserForm from "../components/UserForm";
+import usePermissions from "../hooks/usePermissions";
 
 export default function User() {
   // use selector lit le token directement depuis le store
   const token = useSelector((state) => state.auth.token);
+
+  // Verification des permissions
+  const { canWrite, canDelete } = usePermissions();
 
   // Liste des utilisateurs affichés dans le tableau
   const [users, setUsers] = useState([]);
@@ -32,16 +36,15 @@ export default function User() {
   // Création d'un user : Reçoit les données du form UserForm
   // Ajout direct de l'user retourné par l'API au state sans fetchUsers
   const handleCreate = (formData) => {
-
     const payload = {
-        name: formData.name,
-        firstname: formData.firstname,
-        email: formData.email,
-        ssh_user: formData.ssh_user,
-        role: formData.role,
-        team: formData.team,
-        ip_address: formData.ip_address,
-        plain_password: formData.password
+      name: formData.name,
+      firstname: formData.firstname,
+      email: formData.email,
+      ssh_user: formData.ssh_user,
+      role: formData.role,
+      team: formData.team,
+      ip_address: formData.ip_address,
+      plain_password: formData.password,
     };
 
     fetch("https://badger.arcplex.dev/api/v2/admin/user", {
@@ -54,7 +57,6 @@ export default function User() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         // Ajout de l'user retourné par l'api au tableau existant
         setUsers([...users, data]);
         setShowForm(false);
@@ -139,15 +141,21 @@ export default function User() {
               <td>{user.active ? "OUI" : "NON"}</td>
               <td>
                 {/* setEditUser stock l'user cliqué et ouvre la modale avec ses infos préremplies */}
-                <button onClick={() => setEditUser(user)}>Modifier</button>
-                <button onClick={() => handleDelete(user.id)}>Supprimer</button>
+                {canWrite && (
+                    <button onClick={() => setEditUser(user)}>Modifier</button>
+                )}
+                {canDelete && (
+                    <button onClick={() => handleDelete(user.id)}>Supprimer</button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <button onClick={() => setShowForm(true)}>Ajouter User</button>
+       {canWrite && (
+        <button onClick={() => setShowForm(true)}>Ajouter User</button>
+       )}   
 
       {/* Modale form Ajout : user = null donc form vide*/}
       {showForm && (
