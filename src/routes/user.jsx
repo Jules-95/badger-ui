@@ -61,9 +61,9 @@ export default function User() {
         })
         .then((res) => res.json())
         .then((data)=> {
-            console.log(data);
+            // Ajout de l'user retourné par l'api au tableau existant
+            setUsers([...users, data]);
             setShowForm(false);
-            fetchUsers();
         });
     }
 
@@ -81,7 +81,9 @@ export default function User() {
             },
         })
         .then(() => {
-            fetchUsers();
+            // Retirer l'user suppr du tableau sans rappeler l'API
+            //filter parcourt le tableau et garde les users dont l'id est différent de celui qui vient d'être supprimé
+            setUsers(users.filter((u) => u.id !== userId))
         });
     };
 
