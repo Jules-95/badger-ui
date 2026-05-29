@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import UserForm from "../components/UserForm";
 import usePermissions from "../hooks/usePermissions";
+import Notification from "../components/Notifications";
 
 export default function User() {
   // use selector lit le token directement depuis le store
@@ -18,6 +19,14 @@ export default function User() {
 
   // Stock l'user selectionné pour l'édition - null si aucun
   const [editUser, setEditUser] = useState(null);
+
+  // State des notifications 
+  const [notification, setNotification] = useState(null);
+  // Affiche d'une notif qui disparait après 5 secondes
+  const showMessage = (message, type) => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 5000);
+  }
 
   // Récupération de la liste complète des users depuis l'API
   const fetchUsers = () => {
@@ -55,12 +64,22 @@ export default function User() {
       },
       body: JSON.stringify(payload),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        // Ajout de l'user retourné par l'api au tableau existant
+    .then((res) => {
+        if (!res.ok) {
+            return res.json().then((err) => {
+                const message = Object.values(err)[0];
+                showMessage(`Erreur : ${message}`, "error");
+                return null;
+            });
+        }
+        return res.json();
+    })
+    .then((data) => {
+        if (!data) return;
         setUsers([...users, data]);
         setShowForm(false);
-      });
+        showMessage("Utilisateur créé avec succès", "success");
+    });
   };
 
   // Modif d'un user : Reçoit les données du form UserForm
@@ -174,6 +193,11 @@ export default function User() {
           onClose={() => setEditUser(null)}
         />
       )}
+
+      <Notification
+        message={notification?.message}
+        type={notification?.type}
+      />
     </div>
   );
 }
