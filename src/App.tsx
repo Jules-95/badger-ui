@@ -1,12 +1,12 @@
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './routes/login';
+import Login from './pages/login';
 import { NeedAuth } from './routes/NeedAuth';
-import Serveur from './routes/serveur';
-import User from './routes/user';
-import Vm from './routes/vm';
+import Serveur from './pages/serveur';
+import User from './pages/user';
+import Vm from './pages/vm';
 import Layout from './routes/Layout';
-import Home from './routes/Home';
+import Home from './pages/Home';
 
 
 export default function App() {
