@@ -296,3 +296,32 @@
   gap: 0.5rem;
   justify-content: center;
 }
+
+
+/* ===== HOME ===== */
+.home-hero {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.home-hero h2 {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 0.75rem;
+}
+
+.home-hero p {
+  color: #888;
+  font-size: 1rem;
+}
+
+.home-wip {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  color: #aaa;
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
