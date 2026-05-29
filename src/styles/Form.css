@@ -13,6 +13,12 @@
 }
 
 /* Boite blanche centrale */
+
+.modal-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
 .modal-box {
   background-color: white;
   padding: 2rem;
