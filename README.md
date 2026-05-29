@@ -1,46 +1,89 @@
-# Getting Started with Create React App
+# Badger UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Interface web de gestion de serveurs, machines virtuelles et utilisateurs, consommant une API REST avec authentification JWT.
+Réalisé dans le cadre d'un TP sur REACT
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Stack technique
 
-### `npm start`
+- Create React App
+- TypeScript
+- React Router DOM (routing + routes protégées)
+- Redux Toolkit (état global : token JWT, utilisateur connecté)
+- CSS vanilla (aucun framework CSS)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Installation et lancement
 
-### `npm test`
+### Prérequis
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js installé
+- XAMPP (utilisé pour servir le projet en local)
 
-### `npm run build`
+> L'API est distante, aucun backend local n'est nécessaire.  
+> Base URL : `https://badger.arcplex.dev/api/v2`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Lancement
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+# Installer les dépendances
+npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Lancer le projet en développement
+npm start
+```
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Fonctionnalités
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Login** — authentification via JWT ; token stocké dans Redux et `localStorage`, rechargé automatiquement à l'ouverture si non expiré
+- **Utilisateurs** — CRUD complet (liste, création, modification, suppression)
+- **Serveurs** — affichage de la liste ; boutons d'action présents selon le rôle mais désactivés (TODO)
+- **VMs** — CRUD complet (liste, création, modification, suppression)
+- **Home** — page d'accueil simple après connexion
+- **Layout** — Topbar commune à toute l'application contenant logo (/home), les liens de navigation, infos sur l'utilisateur connecté, bouton logout
+- **Permissions par rôle** — hook `usePermissions` exposant `canWrite` et `canDelete` selon le rôle JWT (`ROLE_SUPER_ADMIN`, `ROLE_CLIENT_ADMIN`, `ROLE_DEVELOPER`) - `ROLE_USER` permet la lecture seule
+- **Notifications** — retours visuels succès / erreur sur chaque action
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Architecture
 
-## Learn More
+```
+src/
+├── pages/          Pages principales (login, home, user, serveur, vm)
+├── components/     Composants réutilisables (formulaires, notifications)
+├── hooks/          Hooks métier (usePermissions, useNotification)
+├── routes/         Gestion du routing (NeedAuth, Layout)
+├── store/          Configuration Redux et slices (authSlice)
+├── styles/         Fichiers CSS partagés (Form.css)
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## TODO
+
+- [ ] CRUD serveurs — boutons affichés selon le rôle mais non fonctionnels (manque de temps)
+- [ ] Barre de recherche sur les pages liste
+- [ ] Améliorer la page Home : récapitulatif des données et raccourcis de navigation
+- [ ] Préciser les messages d'erreur renvoyés par l'API
+- [ ] Améliorer le style global : Rien ne se passe pendant les chargements / Bouton login pas desactivé pendant le fetch 
+- [ ] Mes composants et la plupart de mes pages sont en jsx. Il faudrait passer en tsx et définir des interfaces
+- [ ] Refacto : L'URL est répétée plusieurs fois et pourrait être dans un .env / La logique FETCH est épparpillée et pourrait être dans un fichier api.ts pour centraliser...
+- [ ] Suppression des commentaires qui servaient pour l'apprentissage 
+
+---
+
+## Notes
+
+### Méthode de travail
+- Développement commencé par la page **User**, qui sert de référence. La logique a ensuite été dupliquée et adaptée pour **VM** et **Serveur**.
+- Le projet a évolué de manière itérative : affichage d'abord, puis ajout du CRUD, puis gestion des permissions
+- Le style a été fait une fois la page user complète et s'est bien adapté aux autres pages
+
+### Pourquoi certaines fonctionnalités sont incomplètes
+- Beaucoup de temps passé sur la logique de **login et d'authentification JWT** : stockage dans Redux, rechargement depuis le `localStorage`, et aussi le décodage du token pour récupérer les informations utilisateur. Prise de retard à ce moment là.
+- Le CRUD Serveurs n'a pas pu être finalisé faute de temps.

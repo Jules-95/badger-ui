@@ -33,9 +33,6 @@ export default function Login() {
       // authSlice stock le token dan redux et dans localstorage
       dispatch(setToken(data.jwt));
 
-      //Affichage du jwt décodé
-      console.log("token décodé :", JSON.parse(atob(data.jwt.split(".")[1])));
-
       navigate(from, { replace: true });
     } else {
       showMessage("Identifiants incorrects", "error");

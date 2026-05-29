@@ -32,7 +32,7 @@ export default function Layout() {
               <NavLink to="/home">Home</NavLink>
             </li>
             <li>
-              <NavLink to="/serveur">Serveurs</NavLink>
+              <NavLink to="/serveur">Servers</NavLink>
             </li>
             <li>
               <NavLink to="/user">Users</NavLink>

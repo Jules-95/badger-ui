@@ -23,7 +23,7 @@ export default function Server() {
   return (
     <div className="page">
       <div className="page-header">
-        <h2>Serveurs</h2>
+        <h2>Servers</h2>
         {/* Bouton désactivé — CRUD à implémenter */}
         {canWrite && (
           <button className="btn-add" disabled title="Fonctionnalité à venir">

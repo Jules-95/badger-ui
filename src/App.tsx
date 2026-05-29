@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/login';
 import { NeedAuth } from './routes/NeedAuth';
-import Serveur from './pages/serveur';
+import Serveur from './pages/server';
 import User from './pages/user';
 import Vm from './pages/vm';
 import Layout from './routes/Layout';

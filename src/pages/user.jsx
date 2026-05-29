@@ -145,7 +145,7 @@ export default function User() {
   return (
     <div className="page">
       <div className="page-header">
-        <h2>Utilisateurs</h2>
+        <h2>Users</h2>
         {canWrite && (
           <button className="btn-add" onClick={() => setShowForm(true)}>
             + Ajouter

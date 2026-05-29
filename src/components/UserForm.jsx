@@ -108,7 +108,7 @@ export default function UserForm({ user, onSubmit, onClose }) {
               <option value="">Choisir un rôle</option>
               <option value="ROLE_USER">User</option>
               <option value="ROLE_DEVELOPER">Développeur</option>
-              <option value="ROLE_CLIENT_ADMIN">Clien Admin</option>
+              <option value="ROLE_CLIENT_ADMIN">Client Admin</option>
               <option value="ROLE_SUPER_ADMIN">Super Admin</option>
             </select>
           </div>
