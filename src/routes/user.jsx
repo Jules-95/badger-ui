@@ -104,12 +104,22 @@ export default function User() {
       },
       body: JSON.stringify(payload),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+            return res.json().then((err) => {
+                const message = Object.values(err)[0];
+                showMessage(`Erreur : ${message}`, "error");
+                return null;
+            });
+        }
+        return res.json();
+
+      })
       .then((data) => {
-        // Remplacer l'user modifié dans le tableau existant
-        // map parcourt le tableau, si id correspond à celui modifié alors on remplace sinon on touche pas l'user
+        if (!data) return;
         setUsers(users.map((u) => (u.id === data.id ? data : u)));
         setEditUser(null);
+        showMessage("Utilisateur modifié avec succès", "success");
       });
   };
 
@@ -124,11 +134,18 @@ export default function User() {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }).then(() => {
-      // filter garde les users dont l'id est différent de celui supprimé
-      // user supprimé disparait du tableau sans rappeler l'api
+    }).then((res) => {
+        if (!res.ok) {
+            return res.json().then((err) => {
+               const message = Object.values(err)[0]; 
+               showMessage(`Erreur : ${message}`, "error");
+               return null;
+        });
+    }
       setUsers(users.filter((u) => u.id !== userId));
+      showMessage("Utilisateur supprimé avec succès", "success");
     });
+
   };
 
   return (
