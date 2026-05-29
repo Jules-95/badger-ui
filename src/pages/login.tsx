@@ -2,6 +2,8 @@ import { useState } from "react"
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom"
 import { setToken } from "../store/slices/authSlice";
+import useNotification from "../hooks/useNotification";
+import Notification from "../components/Notifications";
 
 
 
@@ -14,6 +16,8 @@ export default function Login () {
 
     // use Dispatch permet d'envoyer des action au store redux 
     const dispatch = useDispatch();
+
+    const { notification, showMessage } = useNotification();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +40,7 @@ export default function Login () {
 
       navigate(from, { replace: true });
     } else {
-      alert("Identifiants incorrects");
+      showMessage("Identifiants incorrects", "error");
     }
 }; 
 
@@ -47,6 +51,7 @@ return (
         <label>Password</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password" />
         <button type="submit">Login</button>
+        <Notification message={notification?.message ?? null} type={notification?.type ?? null} />
     </form> 
     );
 }
