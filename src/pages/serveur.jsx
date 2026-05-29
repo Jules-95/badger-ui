@@ -1,37 +1,80 @@
+// pages/Server.jsx
+
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
-export default function Serveur() {
-
-    // use selector lit le token directement depuis le store
-    const token = useSelector((state) => state.auth.token);
+import usePermissions from "../hooks/usePermissions";
+import Notification from "../components/Notifications";
 
 
-    // Création de la variable User comme un tableau vide
-    const [servers, setServers] = useState([]);
+export default function Server() {
+  const token = useSelector((state) => state.auth.token);
+  const { canWrite, canDelete } = usePermissions();
+  const [servers, setServers] = useState([]);
+ 
 
-    // Rappel useEffect  : S'execute au chargement -> Appel l'api en passant le jwt dans le header -> res.json converti la reponse en json -> data c'est le tableau d'util -> setUsers(data) = Je stock le tableau dans le state pour l'afficher -> Enfin useEffect se relance si le token a changé
+  useEffect(() => {
+    fetch("https://badger.arcplex.dev/api/v2/admin/server/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => setServers(data));
+  }, [token]);
 
-    useEffect(() => {
-        fetch("https://badger.arcplex.dev/api/v2/admin/server/me", {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            setServers(data);
-         });
-    }, [token]);
+  return (
+    <div className="page">
+      <div className="page-header">
+        <h2>Serveurs</h2>
+        {/* Bouton désactivé — CRUD à implémenter */}
+        {canWrite && (
+          <button className="btn-add" disabled title="Fonctionnalité à venir">
+            + Ajouter
+          </button>
+        )}
+      </div>
 
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>IP publique / privée</th>
+            <th>URL</th>
+            <th>Subnet</th>
+            <th>CPU</th>
+            <th>RAM (Go)</th>
+            <th>Stock (Mo)</th>
+            <th>Hyperviseur</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {servers.map((server) => (
+            <tr key={server.id}>
+              <td>{server.name}</td>
+              <td>{server.public_ip} / {server.private_ip}</td>
+              <td>{server.public_url}</td>
+              <td>{server.subnet}</td>
+              <td>{server.cpu}</td>
+              <td>{server.ram}</td>
+              <td>{server.stock}</td>
+              <td>{server.hypervisor}</td>
+              <td className="table-actions">
+                {/* Boutons désactivés — TODO : implémenter le CRUD */}
+                {canWrite && (
+                  <button className="btn-secondary" disabled title="Fonctionnalité à venir">
+                    Modifier
+                  </button>
+                )}
+                {canDelete && (
+                  <button className="btn-danger" disabled title="Fonctionnalité à venir">
+                    Supprimer
+                  </button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-
-    return (
-
-    <div>
-      <h2>Serveurs</h2>
-      {servers.map((server) => (
-        <p key={server.id}>{server.id}</p> 
-      ))}
     </div>
-
-    );
+  );
 }
