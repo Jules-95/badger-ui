@@ -3,7 +3,6 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { removeToken } from "../store/slices/authSlice";
 
 export default function Layout() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -17,29 +16,51 @@ export default function Layout() {
   };
 
   return (
-    <div>
-      <nav>
-        <ul>
-          <li><NavLink to="/home">Home</NavLink></li>
-          <li><NavLink to="/serveur">Serveurs</NavLink></li>
-          <li><NavLink to="/user">Users</NavLink></li>
-          <li><NavLink to="/vm">VM</NavLink></li>
-        </ul>
+    <div className="app">
+      <nav className="navbar">
+        <div className="navbar-left">
+          <NavLink to="/home">
+          <img
+            src="https://badger.arcplex.dev/badger.png"
+            alt="Badger"
+            className="navbar-logo"
+          />
+          </NavLink>
+          <span className="navbar-brand">Badger</span>
+          <ul className="navbar-links">
+            <li>
+              <NavLink to="/home">Home</NavLink>
+            </li>
+            <li>
+              <NavLink to="/serveur">Serveurs</NavLink>
+            </li>
+            <li>
+              <NavLink to="/user">Users</NavLink>
+            </li>
+            <li>
+              <NavLink to="/vm">VM</NavLink>
+            </li>
+          </ul>
+        </div>
 
-        {/* Info de l'user connecté */}
-        {user && (
-          <div>
-            <p>{user.firstname} {user.name}</p>
-            <p>{user.email}</p>
-            <p>{user.roles[0]}</p>
-          </div>
-        )}
-
-        <button onClick={handleLogout}>Logout</button>
+        <div className="navbar-right">
+          {user && (
+            <div className="navbar-user">
+              <span>
+                {user.firstname} {user.name}
+              </span>
+              <span className="navbar-role">{user.roles[0]}</span>
+            </div>
+          )}
+          <button className="btn-logout" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </nav>
 
-      {/* La page qui sera active va s'affihcer ici */}
-      <Outlet />
+      <main className="main-content">
+        <Outlet />
+      </main>
     </div>
   );
 }
