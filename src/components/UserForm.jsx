@@ -9,20 +9,18 @@ import "../styles/Form.css";
 // - onClose : Fonction pour fermer la modale
 
 export default function UserForm({ user, onSubmit, onClose }) {
+  // Sert pour appeler /client/me depuis ici en appelant le store Redux
+  const token = useSelector((state) => state.auth.token);
 
-    // Sert pour appeler /client/me depuis ici en appelant le store Redux
-    const token = useSelector((state) => state.auth.token);
+  const [teams, setTeams] = useState([]);
 
-    const [teams, setTeams] = useState([]);
-    
-    useEffect(() => {
-        fetch("https://badger.arcplex.dev/api/v2/admin/client/me", {
-            headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => res.json())
-        .then((data) => setTeams(data));
-    }, []);
-
+  useEffect(() => {
+    fetch("https://badger.arcplex.dev/api/v2/admin/client/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => setTeams(data));
+  }, []);
 
   const [formData, setFormData] = useState(
     user
@@ -97,10 +95,12 @@ export default function UserForm({ user, onSubmit, onClose }) {
           </div>
           <div>
             <select name="team" value={formData.team} onChange={handleChange}>
-                <option value="">Choisir team</option>
-                {teams.map((team) => (
-                    <option key={team.id} value={team.id}>{team.name}</option>
-                ))}
+              <option value="">Choisir team</option>
+              {teams.map((team) => (
+                <option key={team.id} value={team.id}>
+                  {team.name}
+                </option>
+              ))}
             </select>
           </div>
           <div>
@@ -114,22 +114,25 @@ export default function UserForm({ user, onSubmit, onClose }) {
           </div>
           {!user && (
             <div>
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="Mot de passe"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
+              <input
+                name="password"
+                type="password"
+                placeholder="Mot de passe"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
             </div>
           )}
-          
 
-          <button type="submit">{user ? "Modifier" : "Ajouter"}</button>
-          <button type="button" onClick={onClose}>
-            Annuler
-          </button>
+          <div className="modal-actions">
+            <button type="submit" className="btn-primary">
+              {user ? "Modifier" : "Ajouter"}
+            </button>
+            <button type="button" className="btn-secondary" onClick={onClose}>
+              Annuler
+            </button>
+          </div>
         </form>
       </div>
     </div>
