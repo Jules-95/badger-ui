@@ -57,7 +57,7 @@ export default function UserForm({ user, onSubmit, onClose }) {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
-        <h3>{user ? "Modifier l'utilisateur" : "Autouter un utilisateur"}</h3>
+        <h3>{user ? "Modifier l'utilisateur" : "Ajouter un utilisateur"}</h3>
         <form onSubmit={handleSubmit}>
           <div>
             <input

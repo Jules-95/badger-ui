@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import UserForm from "../components/UserForm";
 import usePermissions from "../hooks/usePermissions";
 import Notification from "../components/Notifications";
+import useNotification from "../hooks/useNotification";
 
 export default function User() {
   // use selector lit le token directement depuis le store
@@ -20,13 +21,8 @@ export default function User() {
   // Stock l'user selectionné pour l'édition - null si aucun
   const [editUser, setEditUser] = useState(null);
 
-  // State des notifications 
-  const [notification, setNotification] = useState(null);
-  // Affiche d'une notif qui disparait après 5 secondes
-  const showMessage = (message, type) => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 5000);
-  }
+  //Utilisation du hook personalisé pour les notifications
+  const { notification, showMessage } = useNotification();
 
   // Récupération de la liste complète des users depuis l'API
   const fetchUsers = () => {
