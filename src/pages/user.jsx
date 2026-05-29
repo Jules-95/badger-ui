@@ -60,22 +60,22 @@ export default function User() {
       },
       body: JSON.stringify(payload),
     })
-    .then((res) => {
+      .then((res) => {
         if (!res.ok) {
-            return res.json().then((err) => {
-                const message = Object.values(err)[0];
-                showMessage(`Erreur : ${message}`, "error");
-                return null;
-            });
+          return res.json().then((err) => {
+            const message = Object.values(err)[0];
+            showMessage(`Erreur : ${message}`, "error");
+            return null;
+          });
         }
         return res.json();
-    })
-    .then((data) => {
+      })
+      .then((data) => {
         if (!data) return;
         setUsers([...users, data]);
         setShowForm(false);
         showMessage("Utilisateur créé avec succès", "success");
-    });
+      });
   };
 
   // Modif d'un user : Reçoit les données du form UserForm
@@ -102,14 +102,13 @@ export default function User() {
     })
       .then((res) => {
         if (!res.ok) {
-            return res.json().then((err) => {
-                const message = Object.values(err)[0];
-                showMessage(`Erreur : ${message}`, "error");
-                return null;
-            });
+          return res.json().then((err) => {
+            const message = Object.values(err)[0];
+            showMessage(`Erreur : ${message}`, "error");
+            return null;
+          });
         }
         return res.json();
-
       })
       .then((data) => {
         if (!data) return;
@@ -131,24 +130,30 @@ export default function User() {
         Authorization: `Bearer ${token}`,
       },
     }).then((res) => {
-        if (!res.ok) {
-            return res.json().then((err) => {
-               const message = Object.values(err)[0]; 
-               showMessage(`Erreur : ${message}`, "error");
-               return null;
+      if (!res.ok) {
+        return res.json().then((err) => {
+          const message = Object.values(err)[0];
+          showMessage(`Erreur : ${message}`, "error");
+          return null;
         });
-    }
+      }
       setUsers(users.filter((u) => u.id !== userId));
       showMessage("Utilisateur supprimé avec succès", "success");
     });
-
   };
 
   return (
-    <div>
-      <h2>Utilisateurs</h2>
+    <div className="page">
+      <div className="page-header">
+        <h2>Utilisateurs</h2>
+        {canWrite && (
+          <button className="btn-add" onClick={() => setShowForm(true)}>
+            + Ajouter
+          </button>
+        )}
+      </div>
 
-      <table>
+      <table className="table">
         <thead>
           <tr>
             <th>Nom</th>
@@ -171,13 +176,22 @@ export default function User() {
               <td>{user.ssh_user}</td>
               <td>{user.roles[0]}</td>
               <td>{user.active ? "OUI" : "NON"}</td>
-              <td>
-                {/* setEditUser stock l'user cliqué et ouvre la modale avec ses infos préremplies */}
+              <td className="table-actions">
                 {canWrite && (
-                    <button onClick={() => setEditUser(user)}>Modifier</button>
+                  <button
+                    className="btn-secondary"
+                    onClick={() => setEditUser(user)}
+                  >
+                    Modifier
+                  </button>
                 )}
                 {canDelete && (
-                    <button onClick={() => handleDelete(user.id)}>Supprimer</button>
+                  <button
+                    className="btn-danger"
+                    onClick={() => handleDelete(user.id)}
+                  >
+                    Supprimer
+                  </button>
                 )}
               </td>
             </tr>
@@ -185,11 +199,6 @@ export default function User() {
         </tbody>
       </table>
 
-       {canWrite && (
-        <button onClick={() => setShowForm(true)}>Ajouter User</button>
-       )}   
-
-      {/* Modale form Ajout : user = null donc form vide*/}
       {showForm && (
         <UserForm
           user={null}
@@ -197,8 +206,6 @@ export default function User() {
           onClose={() => setShowForm(false)}
         />
       )}
-
-      {/* Modale form Edit : user = editUser donc form pré rempli*/}
       {editUser && (
         <UserForm
           user={editUser}
@@ -207,10 +214,7 @@ export default function User() {
         />
       )}
 
-      <Notification
-        message={notification?.message}
-        type={notification?.type}
-      />
+      <Notification message={notification?.message} type={notification?.type} />
     </div>
   );
 }
