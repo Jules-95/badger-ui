@@ -115,17 +115,17 @@
 }
 
 .btn-add {
-    background-color: #555;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
 .btn-add:hover {
-    background-color: #333;
+  background-color: #555;
 }
 
 /* ===== NOTIFICATIONS ===== */
@@ -260,6 +260,7 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  table-layout: auto;
 }
 
 .table th {
@@ -282,6 +283,10 @@
   border-bottom: none;
 }
 
+.table th:last-child {
+  text-align: center;
+}
+
 .table tr:hover td {
   background-color: #fafafa;
 }
@@ -289,4 +294,5 @@
 .table-actions {
   display: flex;
   gap: 0.5rem;
+  justify-content: center;
 }
